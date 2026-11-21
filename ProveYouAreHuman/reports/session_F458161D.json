@@ -1,0 +1,17 @@
+{
+    "session_id": "F458161D",
+    "final_score": 44.9,
+    "verdict": "VERIFICATION_FAILED",
+    "confidence_level": "LOW CONFIDENCE (SPOOF / DEEPFAKE DETECTED)",
+    "sub_scores": {
+        "challenge_response": 0.0,
+        "face_liveness": 92.5,
+        "hand_biomechanics": 95.0,
+        "anti_deepfake": 85.0
+    },
+    "completed_challenges": [],
+    "anomaly_flags": [
+        "CHALLENGE_TIMEOUT_EXPIRED"
+    ],
+    "duration_sec": 75.24
+}

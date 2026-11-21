@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustLayer Audit Certificate - 1787BE02</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #09090b; color: #f4f4f5; padding: 40px 20px; }
+        .container { max-width: 860px; margin: 0 auto; background: #18181b; border: 1px solid #27272a; border-radius: 16px; padding: 36px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .header { border-bottom: 1px solid #27272a; padding-bottom: 24px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; }
+        .college-title { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #a1a1aa; font-weight: 600; }
+        .proj-title { font-size: 24px; font-weight: 800; color: #38bdf8; margin-top: 4px; }
+        .team { font-size: 12px; color: #71717a; margin-top: 4px; }
+        .badge-box { padding: 24px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 12px; text-align: center; margin-bottom: 28px; }
+        .verdict-tag { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #10b981; font-weight: 700; }
+        .score-val { font-size: 48px; font-weight: 900; color: #10b981; margin: 8px 0; }
+        .conf-val { font-size: 14px; color: #e4e4e7; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+        .card { background: #27272a; padding: 16px; border-radius: 10px; border: 1px solid #3f3f46; }
+        .card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #a1a1aa; margin-bottom: 6px; }
+        .card-val { font-size: 22px; font-weight: 700; color: #38bdf8; }
+        .section-title { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #e4e4e7; margin-bottom: 14px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; margin-bottom: 28px; }
+        th { padding: 10px 14px; background: #27272a; color: #a1a1aa; text-transform: uppercase; font-size: 11px; }
+        .footer { border-top: 1px solid #27272a; padding-top: 20px; font-size: 12px; color: #71717a; display: flex; justify-content: space-between; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <div class="college-title">Zeal College of Engineering & Research &bull; Pune-41</div>
+                <div class="proj-title">TrustLayer: Human Verification System</div>
+                <div class="team">Project Team: Sandesh Kolhe, Sanket Shinde, Rajnandini Mane | Dept. of ECE</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 11px; color: #71717a;">SESSION ID</div>
+                <div style="font-family: monospace; font-size: 16px; font-weight: bold; color: #38bdf8;">#1787BE02</div>
+                <div style="font-size: 11px; color: #71717a; margin-top: 4px;">2026-10-01 21:47:42</div>
+            </div>
+        </div>
+
+        <div class="badge-box">
+            <div class="verdict-tag">&#10004; HUMAN VERIFICATION CONFIRMED</div>
+            <div class="score-val">90.3%</div>
+            <div class="conf-val">HIGH CONFIDENCE (GENUINE LIVE HUMAN) &bull; Total Latency: 7.64s</div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Challenge Response</div>
+                <div class="card-val">100.0%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Face Liveness</div>
+                <div class="card-val">97.5%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Hand Biomechanics</div>
+                <div class="card-val">95.0%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Deepfake Security</div>
+                <div class="card-val">46.5%</div>
+            </div>
+        </div>
+
+        <div class="section-title">Challenge-Response Audit Trail</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Challenge</th>
+                    <th>Type</th>
+                    <th>Execution Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a;">#1 Smile at Camera</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #a1a1aa;">FACE_EXPRESSION</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #38bdf8;">0.53s</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #10b981;">PASSED</td>
+            </tr>
+            
+            <tr>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a;">#2 Blink Twice</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #a1a1aa;">EYE_LIVENESS</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #38bdf8;">0.64s</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #10b981;">PASSED</td>
+            </tr>
+            
+            <tr>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a;">#3 Move Hand UP</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #a1a1aa;">HAND_BIO</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #38bdf8;">6.36s</td>
+                <td style="padding: 10px 14px; border-bottom: 1px solid #27272a; color: #10b981;">PASSED</td>
+            </tr>
+            
+            </tbody>
+        </table>
+
+        <div class="section-title">Security & Anomaly Inspection</div>
+        <div style="background: #27272a; padding: 14px; border-radius: 8px; margin-bottom: 28px;">
+            <span style='color:#10b981; font-size:13px;'>No suspicious artifacts or anomalies detected.</span>
+        </div>
+
+        <div class="footer">
+            <div>Cryptographic Verification Hash: SHA256-TL-1787BE02-1790871462</div>
+            <div>Department of Electronics & Computer Engineering</div>
+        </div>
+    </div>
+</body>
+</html>
+        

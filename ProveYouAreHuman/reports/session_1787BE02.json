@@ -1,0 +1,37 @@
+{
+    "session_id": "1787BE02",
+    "final_score": 90.3,
+    "verdict": "VERIFIED_HUMAN",
+    "confidence_level": "HIGH CONFIDENCE (GENUINE LIVE HUMAN)",
+    "sub_scores": {
+        "challenge_response": 100.0,
+        "face_liveness": 97.5,
+        "hand_biomechanics": 95.0,
+        "anti_deepfake": 46.5
+    },
+    "completed_challenges": [
+        {
+            "name": "Smile at Camera",
+            "type": "FACE_EXPRESSION",
+            "time_taken_sec": 0.53,
+            "accuracy": 1.0,
+            "timestamp": "21:47:35"
+        },
+        {
+            "name": "Blink Twice",
+            "type": "EYE_LIVENESS",
+            "time_taken_sec": 0.64,
+            "accuracy": 1.0,
+            "timestamp": "21:47:36"
+        },
+        {
+            "name": "Move Hand UP",
+            "type": "HAND_BIO",
+            "time_taken_sec": 6.36,
+            "accuracy": 1.0,
+            "timestamp": "21:47:42"
+        }
+    ],
+    "anomaly_flags": [],
+    "duration_sec": 7.64
+}

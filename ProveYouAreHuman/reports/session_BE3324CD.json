@@ -1,0 +1,32 @@
+{
+    "session_id": "BE3324CD",
+    "final_score": 66.2,
+    "verdict": "SUSPICIOUS",
+    "confidence_level": "MEDIUM CONFIDENCE (MANUAL REVIEW)",
+    "sub_scores": {
+        "challenge_response": 66.6,
+        "face_liveness": 97.5,
+        "hand_biomechanics": 92.0,
+        "anti_deepfake": 45.0
+    },
+    "completed_challenges": [
+        {
+            "name": "Turn Head LEFT",
+            "type": "FACE_POSE",
+            "time_taken_sec": 10.68,
+            "accuracy": 1.0,
+            "timestamp": "21:47:11"
+        },
+        {
+            "name": "Blink Twice",
+            "type": "EYE_LIVENESS",
+            "time_taken_sec": 1.41,
+            "accuracy": 1.0,
+            "timestamp": "21:47:13"
+        }
+    ],
+    "anomaly_flags": [
+        "CHALLENGE_TIMEOUT_EXPIRED"
+    ],
+    "duration_sec": 28.22
+}
