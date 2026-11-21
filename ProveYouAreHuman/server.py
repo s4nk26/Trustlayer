@@ -553,6 +553,7 @@ async def websocket_verify_endpoint(websocket: WebSocket):
     last_rppg_data = {}
     last_kinematic = {}
     last_biomarker = {}
+    pending_spoken_text = ""  # Buffer for speech recognition results arriving between frames
 
     print(f"[+] WebSocket Client Connected ({mode.upper()} mode): Session #{manager.session_id}")
 
@@ -592,9 +593,17 @@ async def websocket_verify_endpoint(websocket: WebSocket):
                 print(f"[-] Client requested clean stop: Session #{manager.session_id}")
                 break
 
+            # Buffer spoken_text from speech recognition (arrives without image)
+            if msg.get("spoken_text"):
+                pending_spoken_text = msg["spoken_text"]
+
             image_b64 = msg.get("image") or msg.get("frame")
             if not image_b64:
                 continue
+
+            # Merge any buffered speech recognition text into the frame message
+            if pending_spoken_text and not msg.get("spoken_text"):
+                msg["spoken_text"] = pending_spoken_text
 
             try:
                 frame = decode_base64_image(image_b64)
