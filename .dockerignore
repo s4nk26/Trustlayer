@@ -1,0 +1,13 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+*.zip
+ProveYouAreHuman.zip
+ProveYouAreHuman/__pycache__
+ProveYouAreHuman/modules/__pycache__
+ProveYouAreHuman/reports/*.png
+ProveYouAreHuman/reports/*.html
+ProveYouAreHuman/reports/*.json
