@@ -157,5 +157,10 @@ def get_dashboard_analytics() -> dict:
     }
 
 
+
+# Aliases for server endpoints compatibility
+get_verification_stats = get_dashboard_analytics
+get_recent_verifications = get_all_verifications
+
 # Auto-initialize database on import
 init_db()
