@@ -858,11 +858,11 @@ def get_dashboard():
 
 
 # ============================================================================
-# 6. REDESIGNED USER INTERFACE (/client)
+# 6a. LEGACY CLIENT (kept at /client-v1 for reference)
 # ============================================================================
 
-@app.get("/client", response_class=HTMLResponse)
-def get_web_client():
+@app.get("/client-v1", response_class=HTMLResponse)
+def get_web_client_v1():
     return """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1780,8 +1780,8 @@ def get_web_client():
 </html>"""
 
 
-# ============================================================================
-# 6. REDESIGNED USER INTERFACE (/client)
+# 7. REDESIGNED USER INTERFACE (/client) - Primary Client
+# 6a. LEGACY CLIENT (kept at /client-v1 for reference)
 # ============================================================================
 
 @app.get("/client", response_class=HTMLResponse)
