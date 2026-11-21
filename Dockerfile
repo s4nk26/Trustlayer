@@ -4,11 +4,16 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install system dependencies required by OpenCV and MediaPipe
+# Install system dependencies required by OpenCV and MediaPipe (including EGL and OpenGL)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
+    libegl1 \
+    libgles2 \
     libglib2.0-0 \
     libgomp1 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
     ffmpeg \
     curl \
     && rm -rf /var/lib/apt/lists/*
