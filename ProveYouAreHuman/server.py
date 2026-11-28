@@ -774,25 +774,43 @@ def get_dashboard():
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TrustLayer - Biometric Analytics Dashboard</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background:#09090b; color:#f4f4f5; padding:24px; }
-        .hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; border-bottom:1px solid #27272a; padding-bottom:16px; }
+        body { background:#09090b; color:#f4f4f5; padding:24px; overflow-x:hidden; }
+        .hdr { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:24px; border-bottom:1px solid #27272a; padding-bottom:16px; }
         .hdr h1 { font-size:24px; font-weight:800; color:#38bdf8; letter-spacing:0.5px; }
-        .hdr-actions a { color:#38bdf8; text-decoration:none; margin-left:16px; font-size:13px; font-weight:700; }
+        .hdr-actions a { color:#38bdf8; text-decoration:none; font-size:13px; font-weight:700; display:inline-block; padding:8px 14px; background:#38bdf815; border:1px solid #38bdf840; border-radius:8px; touch-action:manipulation; }
         .grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:24px; }
         .card { background:#18181b; border:1px solid #27272a; border-radius:12px; padding:18px; }
         .card-lbl { font-size:11px; text-transform:uppercase; color:#a1a1aa; letter-spacing:1px; }
         .card-val { font-size:26px; font-weight:800; color:#fff; margin-top:8px; font-family:monospace; }
-        table { width:100%; border-collapse:collapse; background:#18181b; border:1px solid #27272a; border-radius:12px; overflow:hidden; }
+        .table-wrapper { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; background:#18181b; border:1px solid #27272a; border-radius:12px; }
+        table { width:100%; border-collapse:collapse; background:#18181b; min-width:680px; }
         th, td { padding:12px 16px; text-align:left; border-bottom:1px solid #27272a; font-size:13px; }
         th { background:#202025; color:#a1a1aa; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
-        .badge { padding:4px 10px; border-radius:6px; font-weight:800; font-size:11px; font-family:monospace; }
+        .badge { padding:4px 10px; border-radius:6px; font-weight:800; font-size:11px; font-family:monospace; display:inline-block; }
         .badge-verified { background:#10b98125; color:#10b981; border:1px solid #10b98150; }
         .badge-failed { background:#ef444425; color:#ef4444; border:1px solid #ef444450; }
         .badge-suspicious { background:#f59e0b25; color:#f59e0b; border:1px solid #f59e0b50; }
+        @media (max-width: 900px) {
+            .grid { grid-template-columns:repeat(2, 1fr); gap:12px; }
+        }
+        @media (max-width: 600px) {
+            body { padding:14px 12px; }
+            .hdr { margin-bottom:16px; padding-bottom:12px; }
+            .hdr h1 { font-size:18px; line-height:1.25; }
+            .hdr-actions { width:100%; }
+            .hdr-actions a { width:100%; text-align:center; font-size:12px; }
+            .grid { grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:18px; }
+            .card { padding:14px; }
+            .card-val { font-size:21px; }
+            th, td { padding:10px 12px; font-size:12px; white-space:nowrap; }
+        }
+        @media (max-width: 359px) {
+            .grid { grid-template-columns:1fr; }
+        }
     </style>
 </head>
 <body>
@@ -814,23 +832,25 @@ def get_dashboard():
     </div>
 
     <div style="font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#a1a1aa; margin-bottom:12px;">Recent Audit Sessions</div>
-    <table>
-        <thead>
-            <tr>
-                <th>Session ID</th>
-                <th>Timestamp</th>
-                <th>Mode</th>
-                <th>Verdict</th>
-                <th>Trust Score</th>
-                <th>rPPG Pulse</th>
-                <th>Challenges</th>
-                <th>Duration</th>
-            </tr>
-        </thead>
-        <tbody id="sessionRows">
-            <tr><td colspan="8" style="text-align:center; color:#71717a;">Loading session records...</td></tr>
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Session ID</th>
+                    <th>Timestamp</th>
+                    <th>Mode</th>
+                    <th>Verdict</th>
+                    <th>Trust Score</th>
+                    <th>rPPG Pulse</th>
+                    <th>Challenges</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody id="sessionRows">
+                <tr><td colspan="8" style="text-align:center; color:#71717a;">Loading session records...</td></tr>
+            </tbody>
+        </table>
+    </div>
 
     <script>
         async function loadStats() {
@@ -888,7 +908,7 @@ def get_web_client():
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TrustLayer - Continuous Biometric Human Verification</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
@@ -902,7 +922,7 @@ def get_web_client():
         .top-navbar {
             display:flex; justify-content:space-between; align-items:center;
             padding:0 4px 8px; border-bottom:1px solid #27272a; margin-bottom:8px;
-            flex-shrink:0;
+            flex-shrink:0; gap:10px;
         }
         .nav-brand h1 { font-size:17px; color:#38bdf8; font-weight:900; letter-spacing:0.5px; }
         .nav-brand p { font-size:9.5px; color:#71717a; text-transform:uppercase; letter-spacing:1px; }
@@ -910,7 +930,7 @@ def get_web_client():
         .system-switcher { display:flex; gap:8px; }
         .sys-tab {
             background:#18181b; border:1px solid #27272a; padding:6px 14px; border-radius:8px;
-            cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s; color:#a1a1aa;
+            cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s; color:#a1a1aa; touch-action:manipulation;
         }
         .sys-tab:hover { background:#202025; color:#fff; }
         .sys-tab.active { background:#141418; border-color:#38bdf8; color:#fff; box-shadow:0 0 14px rgba(56, 189, 248, 0.2); }
@@ -1011,18 +1031,18 @@ def get_web_client():
         canvas.hidden-canvas { display:none; }
 
         .camera-status-pill {
-            position:absolute; top:10px; left:10px; background:rgba(9, 9, 11, 0.85); backdrop-filter:blur(6px);
+            position:absolute; top:10px; left:10px; max-width:calc(100% - 120px); background:rgba(9, 9, 11, 0.85); backdrop-filter:blur(6px);
             border:1px solid #10b981; border-radius:16px; padding:4px 10px; display:flex; align-items:center; gap:6px; z-index:10;
         }
-        .pill-dot { width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 6px #10b981; }
+        .pill-dot { width:7px; height:7px; flex-shrink:0; border-radius:50%; background:#10b981; box-shadow:0 0 6px #10b981; }
         .pill-dot.suspicious { background:#ef4444 !important; box-shadow:0 0 8px #ef4444 !important; }
-        .pill-text { font-size:10px; font-weight:800; color:#10b981; }
+        .pill-text { font-size:10px; font-weight:800; color:#10b981; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .pill-text.suspicious { color:#ef4444 !important; }
 
         .voice-speaker-badge {
             position:absolute; top:10px; right:10px; background:rgba(9, 9, 11, 0.85); backdrop-filter:blur(6px);
             border:1px solid #38bdf850; border-radius:16px; padding:4px 10px; font-size:10px; color:#38bdf8;
-            font-weight:700; display:flex; align-items:center; gap:4px; cursor:pointer; z-index:10;
+            font-weight:700; display:flex; align-items:center; gap:4px; cursor:pointer; z-index:10; touch-action:manipulation; white-space:nowrap;
         }
 
         /* TASKS DIRECTLY BELOW CAMERA */
@@ -1093,10 +1113,63 @@ def get_web_client():
         }
 
         /* MODAL */
-        .modal-backdrop { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; }
+        .modal-backdrop { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; padding:16px; }
         .modal-backdrop.open { display:flex; }
-        .modal-card { background:#18181b; border:2px solid #38bdf8; border-radius:16px; max-width:540px; width:92%; padding:22px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); }
-        .modal-close-btn { position:absolute; top:14px; right:14px; background:#27272a; border:none; color:#a1a1aa; width:28px; height:28px; border-radius:50%; font-size:16px; cursor:pointer; }
+        .modal-card { background:#18181b; border:2px solid #38bdf8; border-radius:16px; max-width:540px; width:100%; max-height:90vh; overflow-y:auto; padding:22px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); }
+        .modal-close-btn { position:absolute; top:14px; right:14px; background:#27272a; border:none; color:#a1a1aa; width:32px; height:32px; border-radius:50%; font-size:16px; cursor:pointer; touch-action:manipulation; }
+        .modal-actions-row { display:flex; gap:10px; margin-top:14px; }
+
+        /* TABLET & MOBILE RESPONSIVE OVERRIDES FOR PANORAMIC UI */
+        @media (max-width: 1024px) {
+            body {
+                height:auto; max-height:none; min-height:100vh;
+                overflow-x:hidden; overflow-y:auto; padding:10px 12px 28px;
+            }
+            .top-navbar {
+                flex-direction:column; align-items:stretch; gap:10px; padding:0 0 10px;
+            }
+            .nav-brand { text-align:center; }
+            .nav-brand h1 { font-size:clamp(14px, 3.8vw, 18px); line-height:1.25; }
+            .nav-brand p { font-size:clamp(8.5px, 2.2vw, 10px); }
+            .system-switcher {
+                display:grid; grid-template-columns:1fr 1fr; gap:6px; width:100%;
+            }
+            .system-switcher a.sys-tab { grid-column:1 / -1; justify-content:center; }
+            .sys-tab { justify-content:center; padding:8px 10px; min-height:40px; }
+            .sys-tab-title { font-size:10.5px; }
+            .main-panoramic-grid {
+                display:flex; flex-direction:column; gap:10px; overflow:visible; flex:none;
+            }
+            .center-panel { order:-1; overflow:visible; gap:10px; }
+            .camera-viewport-box { flex:none; padding:8px; overflow:visible; }
+            .camera-wrapper { height:auto; aspect-ratio:4/3; margin:0 auto; }
+            video { object-fit:cover; }
+            .side-panel { overflow:visible; padding:12px; }
+            .numeric-stack {
+                display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;
+            }
+            .telemetry-card { flex-direction:column; align-items:flex-start; gap:5px; padding:8px 10px; }
+            .tc-val { width:100%; text-align:left; font-size:12px; word-break:break-word; }
+            .graph-stack { gap:8px; }
+            .graph-box { flex:none; }
+            .btn { padding:13px 16px; font-size:14px; min-height:46px; touch-action:manipulation; }
+        }
+        @media (max-width: 600px) {
+            body { padding:8px 10px 26px; }
+            .camera-status-pill { top:8px; left:8px; padding:4px 8px; max-width:calc(100% - 102px); }
+            .pill-text { font-size:9px; }
+            .voice-speaker-badge { top:8px; right:8px; padding:4px 8px; font-size:9px; }
+            .task-action-box { padding:12px 12px; }
+            .task-instruction-text { font-size:15px; }
+            .code-tiles-row { gap:4px; }
+            .code-tile { width:clamp(28px, 8.8vw, 36px); height:clamp(36px, 10.5vw, 42px); font-size:clamp(16px, 4.5vw, 19px); }
+            .modal-card { padding:18px 14px; }
+            .modal-actions-row { flex-direction:column; }
+        }
+        @media (max-width: 359px) {
+            .system-switcher { grid-template-columns:1fr; }
+            .numeric-stack { grid-template-columns:1fr; }
+        }
     </style>
 </head>
 <body>
@@ -1205,7 +1278,7 @@ def get_web_client():
         <div class="center-panel">
             <div class="camera-viewport-box">
                 <div class="camera-wrapper">
-                    <video id="webcam" autoplay playsinline></video>
+                    <video id="webcam" autoplay playsinline muted></video>
                     <canvas class="hud-overlay" id="hudOverlay" width="800" height="600"></canvas>
                     <canvas class="hidden-canvas" id="captureCanvas" width="640" height="480"></canvas>
 
@@ -1309,7 +1382,7 @@ def get_web_client():
                 <div id="modalVerdictTitle" style="font-size:18px; font-weight:900; color:#10b981;">✔ VERIFIED GENUINE HUMAN</div>
                 <div id="modalScoreValue" style="font-size:28px; font-weight:900; color:#fff; font-family:monospace; margin-top:4px;">96%</div>
             </div>
-            <div style="display:flex; gap:10px; margin-top:14px;">
+            <div class="modal-actions-row">
                 <button class="btn" onclick="closeAuditModal()" style="flex:1;">OK / COMPLETE</button>
                 <a href="/dashboard" class="btn btn-cyan" style="flex:1; text-decoration:none; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;">VIEW IN DASHBOARD &rarr;</a>
             </div>
@@ -1436,12 +1509,53 @@ def get_web_client():
             gCtx.fill();
         }
 
+        function syncCameraLayout() {
+            const vw = video.videoWidth || 640;
+            const vh = video.videoHeight || 480;
+            const wrapper = document.querySelector('.camera-wrapper');
+            const isPanoramicDesktop = !!document.querySelector('.main-panoramic-grid') && window.innerWidth > 1024;
+            if (wrapper) {
+                if (isPanoramicDesktop) {
+                    wrapper.style.aspectRatio = '';
+                    wrapper.style.maxWidth = '';
+                } else {
+                    wrapper.style.aspectRatio = `${vw} / ${vh}`;
+                    if (vh > vw) {
+                        const maxH = Math.max(260, window.innerHeight * 0.52);
+                        wrapper.style.maxWidth = `${Math.round(Math.min(440, maxH * (vw / vh)))}px`;
+                    } else {
+                        wrapper.style.maxWidth = '820px';
+                    }
+                }
+            }
+            const scale = Math.min(1, 640 / Math.max(vw, vh));
+            canvas.width = Math.max(1, Math.round(vw * scale));
+            canvas.height = Math.max(1, Math.round(vh * scale));
+
+            const hudBaseW = vw >= vh ? 800 : 520;
+            hudCanvas.width = hudBaseW;
+            hudCanvas.height = Math.max(1, Math.round(hudBaseW * (vh / vw)));
+        }
+        video.addEventListener('loadedmetadata', syncCameraLayout);
+        window.addEventListener('resize', syncCameraLayout);
+
         async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { width:800, height:600 } });
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: "user",
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                });
                 video.srcObject = stream;
             } catch(e) {
-                alert("Please grant camera permissions to activate TrustLayer verification.");
+                try {
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = fallbackStream;
+                } catch(err) {
+                    alert("Please grant camera permissions to activate TrustLayer verification.");
+                }
             }
         }
         initCamera();
@@ -1781,7 +1895,10 @@ def get_web_client():
         // Send REAL calculated path_conformance
         function captureAndSend() {
             if (ws && ws.readyState === WebSocket.OPEN) {
-                ctx.drawImage(video, 0, 0, 640, 480);
+                if (video.videoWidth > 0 && (canvas.width === 0 || canvas.height === 0)) {
+                    syncCameraLayout();
+                }
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const base64Img = canvas.toDataURL('image/jpeg', 0.65);
 
                 const realConformance = currentWaypoints.length > 0 ? 
@@ -1824,21 +1941,21 @@ def get_web_client_vertical():
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>TrustLayer - Multimodal Kinematic & Biosignal Verification</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background:#09090b; color:#f4f4f5; display:flex; flex-direction:column; align-items:center; min-height:100vh; padding:16px 20px 40px; }
+        body { background:#09090b; color:#f4f4f5; display:flex; flex-direction:column; align-items:center; min-height:100vh; width:100%; overflow-x:hidden; padding:16px 20px 40px; }
         
-        .header { text-align:center; margin-bottom:12px; }
-        .header h1 { font-size:24px; color:#38bdf8; font-weight:900; letter-spacing:1px; }
-        .header p { font-size:11px; color:#71717a; text-transform:uppercase; letter-spacing:1.5px; margin-top:3px; }
+        .header { text-align:center; margin-bottom:12px; width:100%; max-width:980px; }
+        .header h1 { font-size:clamp(16px, 4vw, 24px); color:#38bdf8; font-weight:900; letter-spacing:1px; line-height:1.25; }
+        .header p { font-size:clamp(9.5px, 2.3vw, 11px); color:#71717a; text-transform:uppercase; letter-spacing:1.5px; margin-top:3px; line-height:1.4; }
         
         /* SYSTEM SWITCHER TABS */
         .system-switcher { display:flex; gap:12px; max-width:880px; width:100%; margin-bottom:14px; justify-content:center; }
         .sys-tab {
             flex:1; background:#18181b; border:1px solid #27272a; padding:10px 16px; border-radius:12px;
-            cursor:pointer; display:flex; align-items:center; gap:10px; transition:all 0.25s ease; color:#a1a1aa; text-align:left;
+            cursor:pointer; display:flex; align-items:center; gap:10px; transition:all 0.25s ease; color:#a1a1aa; text-align:left; touch-action:manipulation;
         }
         .sys-tab:hover { background:#202025; border-color:#3f3f46; color:#fff; }
         .sys-tab.active { background:#141418; border-color:#38bdf8; color:#fff; box-shadow:0 0 20px rgba(56, 189, 248, 0.15); }
@@ -1861,7 +1978,7 @@ def get_web_client_vertical():
             position:relative; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:flex; flex-direction:column; align-items:center;
         }
         .camera-wrapper {
-            position:relative; width:100%; max-width:820px; aspect-ratio:4/3; border-radius:14px; overflow:hidden; background:#000;
+            position:relative; width:100%; max-width:820px; aspect-ratio:4/3; border-radius:14px; overflow:hidden; background:#000; margin:0 auto;
         }
         video { width:100%; height:100%; object-fit:cover; display:block; transform:scaleX(-1); background:#000; }
         canvas.hud-overlay { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
@@ -1869,19 +1986,19 @@ def get_web_client_vertical():
 
         /* LIVE STATUS PILL ON CAMERA */
         .camera-status-pill {
-            position:absolute; top:12px; left:12px; background:rgba(9, 9, 11, 0.85); backdrop-filter:blur(6px);
+            position:absolute; top:12px; left:12px; max-width:calc(100% - 135px); background:rgba(9, 9, 11, 0.85); backdrop-filter:blur(6px);
             border:1px solid #10b981; border-radius:20px; padding:6px 14px; display:flex; align-items:center; gap:8px; z-index:10;
         }
-        .pill-dot { width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981; }
+        .pill-dot { width:8px; height:8px; flex-shrink:0; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981; }
         .pill-dot.suspicious { background:#ef4444 !important; box-shadow:0 0 10px #ef4444 !important; }
-        .pill-text { font-size:11px; font-weight:800; color:#10b981; letter-spacing:0.5px; }
+        .pill-text { font-size:11px; font-weight:800; color:#10b981; letter-spacing:0.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .pill-text.suspicious { color:#ef4444 !important; }
 
         /* VOICE SPEECH INDICATOR ON CAMERA */
         .voice-speaker-badge {
             position:absolute; top:12px; right:12px; background:rgba(9, 9, 11, 0.85); backdrop-filter:blur(6px);
             border:1px solid #38bdf850; border-radius:20px; padding:6px 12px; font-size:11px; color:#38bdf8;
-            font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer; z-index:10;
+            font-weight:700; display:flex; align-items:center; gap:6px; cursor:pointer; z-index:10; touch-action:manipulation; white-space:nowrap;
         }
 
         /* TASKS DIRECTLY BELOW CAMERA VIEWPORT */
@@ -2017,8 +2134,8 @@ def get_web_client_vertical():
         /* CONTROLS BUTTON */
         .action-button-row { width:100%; max-width:440px; margin-top:4px; }
         .btn {
-            background:#10b981; color:#09090b; border:none; padding:14px 24px; border-radius:12px;
-            font-weight:800; font-size:15px; cursor:pointer; width:100%; transition:all 0.2s; letter-spacing:0.5px;
+            background:#10b981; color:#09090b; border:none; padding:14px 24px; border-radius:12px; min-height:48px;
+            font-weight:800; font-size:15px; cursor:pointer; width:100%; transition:all 0.2s; letter-spacing:0.5px; touch-action:manipulation;
         }
         .btn:hover { background:#059669; }
         .btn.btn-stop { background:#ef4444; color:#fff; }
@@ -2027,10 +2144,45 @@ def get_web_client_vertical():
         .btn.btn-cyan:hover { background:#0284c7; }
 
         /* MODAL */
-        .modal-backdrop { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; }
+        .modal-backdrop { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); z-index:9999; align-items:center; justify-content:center; padding:16px; }
         .modal-backdrop.open { display:flex; }
-        .modal-card { background:#18181b; border:2px solid #38bdf8; border-radius:16px; max-width:620px; width:92%; padding:26px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); }
-        .modal-close-btn { position:absolute; top:16px; right:16px; background:#27272a; border:none; color:#a1a1aa; width:30px; height:30px; border-radius:50%; font-size:18px; cursor:pointer; }
+        .modal-card { background:#18181b; border:2px solid #38bdf8; border-radius:16px; max-width:620px; width:100%; max-height:90vh; overflow-y:auto; padding:26px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.8); }
+        .modal-close-btn { position:absolute; top:16px; right:16px; background:#27272a; border:none; color:#a1a1aa; width:34px; height:34px; border-radius:50%; font-size:18px; cursor:pointer; touch-action:manipulation; }
+        .modal-actions-row { display:flex; gap:10px; margin-top:14px; }
+
+        /* MOBILE RESPONSIVE OVERRIDES */
+        @media (max-width: 680px) {
+            body { padding:10px 10px 30px; }
+            .header { margin-bottom:10px; }
+            .system-switcher { flex-direction:column; gap:8px; margin-bottom:10px; }
+            .sys-tab { padding:10px 12px; gap:10px; }
+            .sys-tab-title { font-size:11.5px; }
+            .sys-tab-sub { font-size:10px; line-height:1.3; }
+            .center-container { gap:10px; }
+            .camera-viewport-box { padding:8px; border-radius:14px; }
+            .camera-wrapper { border-radius:10px; }
+            .camera-status-pill { top:8px; left:8px; padding:4px 9px; gap:5px; max-width:calc(100% - 108px); }
+            .pill-text { font-size:9.5px; }
+            .voice-speaker-badge { top:8px; right:8px; padding:4px 9px; font-size:9.5px; gap:4px; }
+            .task-action-box { padding:14px 12px; border-radius:14px; }
+            .task-stage-badge { font-size:10px; padding:3px 10px; }
+            .task-instruction-text { font-size:16px; margin-bottom:8px; }
+            .code-badges-container { padding:10px 6px; margin:10px auto; }
+            .code-tiles-row { gap:4px; }
+            .code-tile { width:clamp(28px, 8.8vw, 40px); height:clamp(38px, 11vw, 48px); font-size:clamp(17px, 4.8vw, 22px); border-radius:6px; }
+            .passive-shield-banner { padding:14px 12px; }
+            .passive-banner-title { font-size:13.5px; }
+            .split-col { padding:12px; gap:10px; }
+            .numeric-cards-grid { gap:8px; }
+            .telemetry-card { padding:9px 10px; }
+            .tc-val { font-size:13px; word-break:break-word; }
+            .btn { padding:13px 16px; font-size:14px; }
+            .modal-card { padding:18px 16px; }
+            .modal-actions-row { flex-direction:column; }
+        }
+        @media (max-width: 359px) {
+            .numeric-cards-grid { grid-template-columns:1fr; }
+        }
     </style>
 </head>
 <body>
@@ -2062,7 +2214,7 @@ def get_web_client_vertical():
         <!-- 1. PROMINENT LARGE CAMERA VIEWPORT -->
         <div class="camera-viewport-box">
             <div class="camera-wrapper">
-                <video id="webcam" autoplay playsinline></video>
+                <video id="webcam" autoplay playsinline muted></video>
                 <canvas class="hud-overlay" id="hudOverlay" width="800" height="600"></canvas>
                 <canvas class="hidden-canvas" id="captureCanvas" width="640" height="480"></canvas>
 
@@ -2217,7 +2369,7 @@ def get_web_client_vertical():
                 <div id="modalVerdictTitle" style="font-size:18px; font-weight:900; color:#10b981;">✔ VERIFIED GENUINE HUMAN</div>
                 <div id="modalScoreValue" style="font-size:28px; font-weight:900; color:#fff; font-family:monospace; margin-top:4px;">96%</div>
             </div>
-            <div style="display:flex; gap:10px; margin-top:14px;">
+            <div class="modal-actions-row">
                 <button class="btn" onclick="closeAuditModal()" style="flex:1;">OK / COMPLETE</button>
                 <a href="/dashboard" class="btn btn-cyan" style="flex:1; text-decoration:none; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;">VIEW IN DASHBOARD &rarr;</a>
             </div>
@@ -2344,12 +2496,53 @@ def get_web_client_vertical():
             gCtx.fill();
         }
 
+        function syncCameraLayout() {
+            const vw = video.videoWidth || 640;
+            const vh = video.videoHeight || 480;
+            const wrapper = document.querySelector('.camera-wrapper');
+            const isPanoramicDesktop = !!document.querySelector('.main-panoramic-grid') && window.innerWidth > 1024;
+            if (wrapper) {
+                if (isPanoramicDesktop) {
+                    wrapper.style.aspectRatio = '';
+                    wrapper.style.maxWidth = '';
+                } else {
+                    wrapper.style.aspectRatio = `${vw} / ${vh}`;
+                    if (vh > vw) {
+                        const maxH = Math.max(260, window.innerHeight * 0.52);
+                        wrapper.style.maxWidth = `${Math.round(Math.min(440, maxH * (vw / vh)))}px`;
+                    } else {
+                        wrapper.style.maxWidth = '820px';
+                    }
+                }
+            }
+            const scale = Math.min(1, 640 / Math.max(vw, vh));
+            canvas.width = Math.max(1, Math.round(vw * scale));
+            canvas.height = Math.max(1, Math.round(vh * scale));
+
+            const hudBaseW = vw >= vh ? 800 : 520;
+            hudCanvas.width = hudBaseW;
+            hudCanvas.height = Math.max(1, Math.round(hudBaseW * (vh / vw)));
+        }
+        video.addEventListener('loadedmetadata', syncCameraLayout);
+        window.addEventListener('resize', syncCameraLayout);
+
         async function initCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { width:800, height:600 } });
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: "user",
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }
+                });
                 video.srcObject = stream;
             } catch(e) {
-                alert("Please grant camera permissions to activate TrustLayer verification.");
+                try {
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = fallbackStream;
+                } catch(err) {
+                    alert("Please grant camera permissions to activate TrustLayer verification.");
+                }
             }
         }
         initCamera();
@@ -2689,7 +2882,10 @@ def get_web_client_vertical():
         // Send REAL calculated path_conformance
         function captureAndSend() {
             if (ws && ws.readyState === WebSocket.OPEN) {
-                ctx.drawImage(video, 0, 0, 640, 480);
+                if (video.videoWidth > 0 && (canvas.width === 0 || canvas.height === 0)) {
+                    syncCameraLayout();
+                }
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 const base64Img = canvas.toDataURL('image/jpeg', 0.65);
 
                 const realConformance = currentWaypoints.length > 0 ? 
