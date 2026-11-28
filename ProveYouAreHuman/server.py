@@ -863,11 +863,11 @@ def get_dashboard():
 
 
 # ============================================================================
-# 6a. LEGACY CLIENT (kept at /client-v1 for reference)
+# 6. PANORAMIC ONE-SCREEN USER INTERFACE (/client) — Primary UI
 # ============================================================================
 
-@app.get("/client-v1", response_class=HTMLResponse)
-def get_web_client_v1():
+@app.get("/client", response_class=HTMLResponse)
+def get_web_client():
     return """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1785,12 +1785,12 @@ def get_web_client_v1():
 </html>"""
 
 
-# 7. REDESIGNED USER INTERFACE (/client) - Primary Client
-# 6a. LEGACY CLIENT (kept at /client-v1 for reference)
+# ============================================================================
+# 7. VERTICAL LAYOUT (kept at /client-vertical for fallback)
 # ============================================================================
 
-@app.get("/client", response_class=HTMLResponse)
-def get_web_client():
+@app.get("/client-vertical", response_class=HTMLResponse)
+def get_web_client_vertical():
     return """<!DOCTYPE html>
 <html lang="en">
 <head>
