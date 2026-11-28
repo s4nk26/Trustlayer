@@ -72,18 +72,30 @@ def save_verification(session_data: dict) -> int:
 
 def get_all_verifications(limit: int = 100) -> list:
     """
-    Fetches the most recent verification sessions.
+    Fetches the most recent verification sessions with parsed metadata.
     """
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
         SELECT session_id, timestamp, verdict, score, confidence_level, 
-               challenges_completed, total_challenges, duration_sec 
+               challenges_completed, total_challenges, duration_sec, details_json 
         FROM verifications 
         ORDER BY id DESC 
         LIMIT ?
     """, (limit,))
-    rows = [dict(row) for row in cursor.fetchall()]
+    rows = []
+    for row in cursor.fetchall():
+        d = dict(row)
+        try:
+            details = json.loads(d.get("details_json", "{}"))
+            d["heart_rate_bpm"] = details.get("heart_rate_bpm", 0.0)
+            d["mode"] = details.get("mode", "standard")
+        except Exception:
+            d["heart_rate_bpm"] = 0.0
+            d["mode"] = "standard"
+        if "details_json" in d:
+            del d["details_json"]
+        rows.append(d)
     conn.close()
     return rows
 

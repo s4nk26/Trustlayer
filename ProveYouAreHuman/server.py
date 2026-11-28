@@ -707,16 +707,26 @@ async def websocket_verify_endpoint(websocket: WebSocket):
 
                 await websocket.send_json(resp_payload)
 
-        # In standard mode, send final audit summary certificate
+        # Always compute and persist session audit record to database
+        summary = manager.calculate_final_summary(last_face_data, last_hand_data, last_df_data, last_rppg_data)
+        summary["mode"] = mode
+        if mode == "live" and manager.is_gateway_cleared:
+            summary["verdict"] = "VERIFIED"
+            summary["confidence_level"] = "HIGH CONFIDENCE (LIVE SHIELD CLEARED)"
+        db_id = database.save_verification(summary)
+        summary["db_record_id"] = db_id
+        summary["status"] = "completed"
+        print(f"[+] {mode.title()} Session Saved to Database: #{summary['session_id']} | Verdict: {summary['verdict']} | Score: {summary['score']}%")
+
         if mode == "standard":
-            summary = manager.calculate_final_summary(last_face_data, last_hand_data, last_df_data, last_rppg_data)
-            db_id = database.save_verification(summary)
-            summary["db_record_id"] = db_id
-            summary["status"] = "completed"
-            summary["mode"] = "standard"
-            print(f"[+] Standard Session Complete: #{summary['session_id']} | Verdict: {summary['verdict']} | Score: {summary['score']}%")
             await websocket.send_json(summary)
             await websocket.close()
+        elif mode == "live":
+            try:
+                summary["status"] = "live_stopped"
+                await websocket.send_json(summary)
+            except Exception:
+                pass
 
     except WebSocketDisconnect:
         print(f"[-] Client disconnected: Session #{manager.session_id}")
@@ -809,6 +819,7 @@ def get_dashboard():
             <tr>
                 <th>Session ID</th>
                 <th>Timestamp</th>
+                <th>Mode</th>
                 <th>Verdict</th>
                 <th>Trust Score</th>
                 <th>rPPG Pulse</th>
@@ -817,7 +828,7 @@ def get_dashboard():
             </tr>
         </thead>
         <tbody id="sessionRows">
-            <tr><td colspan="7" style="text-align:center; color:#71717a;">Loading session records...</td></tr>
+            <tr><td colspan="8" style="text-align:center; color:#71717a;">Loading session records...</td></tr>
         </tbody>
     </table>
 
@@ -840,9 +851,14 @@ def get_dashboard():
                     tbody.innerHTML = d.sessions.map(s => {
                         const isV = s.verdict === 'VERIFIED';
                         const cls = isV ? 'badge-verified' : (s.verdict === 'SUSPICIOUS' ? 'badge-suspicious' : 'badge-failed');
+                        const isLive = (s.mode || '').toLowerCase() === 'live';
+                        const modeBadge = isLive 
+                            ? '<span class="badge" style="background:#10b98120; color:#10b981; border:1px solid #10b98150;">🟢 LIVE SHIELD</span>'
+                            : '<span class="badge" style="background:#38bdf820; color:#38bdf8; border:1px solid #38bdf850;">⚡ STANDARD</span>';
                         return `<tr>
                             <td style="font-family:monospace; font-weight:700;">${s.session_id}</td>
                             <td style="color:#a1a1aa;">${s.timestamp}</td>
+                            <td>${modeBadge}</td>
                             <td><span class="badge ${cls}">${s.verdict}</span></td>
                             <td style="font-weight:700;">${s.score}%</td>
                             <td style="color:#10b981;">${s.heart_rate_bpm ? Math.round(s.heart_rate_bpm) + ' BPM' : '--'}</td>
@@ -851,12 +867,12 @@ def get_dashboard():
                         </tr>`;
                     }).join('');
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#71717a;">No sessions recorded yet. Run a verification audit on /client.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:#71717a;">No sessions recorded yet. Run a verification audit on /client.</td></tr>';
                 }
             } catch(e) {}
         }
         loadStats();
-        setInterval(loadStats, 5000);
+        setInterval(loadStats, 4000);
     </script>
 </body>
 </html>"""
@@ -1101,6 +1117,11 @@ def get_web_client():
                 <span class="sys-tab-icon">⚡</span>
                 <span class="sys-tab-title">SYSTEM 1: AUDIT PROTOCOL</span>
             </button>
+
+            <a href="/dashboard" class="sys-tab" style="text-decoration:none; color:#38bdf8; border-color:#38bdf850; background:#38bdf815;" title="Open Analytics & Audit History">
+                <span class="sys-tab-icon">📊</span>
+                <span class="sys-tab-title">AUDIT DASHBOARD</span>
+            </a>
         </div>
     </div>
 
@@ -1288,7 +1309,10 @@ def get_web_client():
                 <div id="modalVerdictTitle" style="font-size:18px; font-weight:900; color:#10b981;">✔ VERIFIED GENUINE HUMAN</div>
                 <div id="modalScoreValue" style="font-size:28px; font-weight:900; color:#fff; font-family:monospace; margin-top:4px;">96%</div>
             </div>
-            <button class="btn" onclick="closeAuditModal()">OK / COMPLETE</button>
+            <div style="display:flex; gap:10px; margin-top:14px;">
+                <button class="btn" onclick="closeAuditModal()" style="flex:1;">OK / COMPLETE</button>
+                <a href="/dashboard" class="btn btn-cyan" style="flex:1; text-decoration:none; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;">VIEW IN DASHBOARD &rarr;</a>
+            </div>
         </div>
     </div>
 
@@ -1773,6 +1797,11 @@ def get_web_client():
         function showAuditResultModal(data) {
             document.getElementById('modalSessionHeader').innerText = `CERTIFICATE #${data.session_id}`;
             document.getElementById('modalScoreValue').innerText = `${data.score}%`;
+            const isV = data.verdict === 'VERIFIED';
+            document.getElementById('modalVerdictTitle').innerText = isV ? '✔ VERIFIED GENUINE HUMAN' : '✖ SUSPICIOUS / UNCONFIRMED';
+            document.getElementById('modalVerdictTitle').style.color = isV ? '#10b981' : '#ef4444';
+            document.getElementById('modalVerdictBanner').style.borderColor = isV ? '#10b981' : '#ef4444';
+            document.getElementById('modalVerdictBanner').style.background = isV ? '#10b98115' : '#ef444415';
             document.getElementById('finalAuditModal').classList.add('open');
         }
 
@@ -2188,7 +2217,10 @@ def get_web_client_vertical():
                 <div id="modalVerdictTitle" style="font-size:18px; font-weight:900; color:#10b981;">✔ VERIFIED GENUINE HUMAN</div>
                 <div id="modalScoreValue" style="font-size:28px; font-weight:900; color:#fff; font-family:monospace; margin-top:4px;">96%</div>
             </div>
-            <button class="btn" onclick="closeAuditModal()">OK / COMPLETE</button>
+            <div style="display:flex; gap:10px; margin-top:14px;">
+                <button class="btn" onclick="closeAuditModal()" style="flex:1;">OK / COMPLETE</button>
+                <a href="/dashboard" class="btn btn-cyan" style="flex:1; text-decoration:none; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800;">VIEW IN DASHBOARD &rarr;</a>
+            </div>
         </div>
     </div>
 
@@ -2673,6 +2705,11 @@ def get_web_client_vertical():
         function showAuditResultModal(data) {
             document.getElementById('modalSessionHeader').innerText = `CERTIFICATE #${data.session_id}`;
             document.getElementById('modalScoreValue').innerText = `${data.score}%`;
+            const isV = data.verdict === 'VERIFIED';
+            document.getElementById('modalVerdictTitle').innerText = isV ? '✔ VERIFIED GENUINE HUMAN' : '✖ SUSPICIOUS / UNCONFIRMED';
+            document.getElementById('modalVerdictTitle').style.color = isV ? '#10b981' : '#ef4444';
+            document.getElementById('modalVerdictBanner').style.borderColor = isV ? '#10b981' : '#ef4444';
+            document.getElementById('modalVerdictBanner').style.background = isV ? '#10b98115' : '#ef444415';
             document.getElementById('finalAuditModal').classList.add('open');
         }
 
